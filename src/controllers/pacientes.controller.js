@@ -82,6 +82,50 @@ pacientesCtrl.getPaciente=async(req, res)=>{
   }
 };
 
+pacientesCtrl.updatePaciente =async(req, res)=>{
+  try {
+    await Pacientes.upsert({
+      idPaciente:req.body.idPaciente,
+      nombre:req.body.nombre,
+      //avatar: req.body.avatar,
+      idNivel: req.body.idNivel,
+      edad: req.body.edad,
+      email: req.body.email,})
+    .then(([result, created]) => {
+      res.json({"IdPciente":result.idPaciente});
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while updating ."
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  } 
+};
+
+pacientesCtrl.deletePaciente =async(req,res)=>{
+  try {
+    await Pacientes.destroy({
+      where:{
+        idPaciente:req.params.id
+      }
+    })
+    .then(([result, created]) => {
+      res.json({"IdPciente":req.params.id});
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while updating ."
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  } 
+}
+
 
 
 
